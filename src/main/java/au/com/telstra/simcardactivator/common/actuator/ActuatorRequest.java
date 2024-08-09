@@ -1,4 +1,6 @@
-package au.com.telstra.simcardactivator.common;
+package au.com.telstra.simcardactivator.common.actuator;
+
+import au.com.telstra.simcardactivator.common.sim.activation.SimActivationRequest;
 
 public class ActuatorRequest
 {

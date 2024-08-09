@@ -1,9 +1,10 @@
 package au.com.telstra.simcardactivator.rest;
 
-import au.com.telstra.simcardactivator.common.ActuatorRequest;
-import au.com.telstra.simcardactivator.common.ActuatorResponse;
-import au.com.telstra.simcardactivator.common.SimActivationRequest;
-import au.com.telstra.simcardactivator.common.SimActivationService;
+import au.com.telstra.simcardactivator.common.actuator.ActuatorResponse;
+import au.com.telstra.simcardactivator.common.sim.SimCard;
+import au.com.telstra.simcardactivator.common.sim.SimCardRepository;
+import au.com.telstra.simcardactivator.common.sim.activation.SimActivationRequest;
+import au.com.telstra.simcardactivator.common.sim.activation.SimActivationService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -12,11 +13,13 @@ import org.springframework.web.bind.annotation.*;
 public class SimController
 {
     private SimActivationService simActivationService;
+    private SimCardRepository simCardRepository;
 
     @Autowired
-    public void setupSimActivationService(SimActivationService service)
+    public void setup(SimActivationService service, SimCardRepository repository)
     {
         this.simActivationService = service;
+        this.simCardRepository = repository;
     }
 
     @PostMapping(value = "/activate", consumes = "application/json", produces = "application/json")
@@ -35,6 +38,15 @@ public class SimController
             System.out.println("Could not activate SIM " + part);
         }
 
+        SimCard card = new SimCard(request, response);
+        simCardRepository.save(card);
+
         return response;
+    }
+
+    @GetMapping("/getfrom")
+    public SimCard getSimCardFrom(long simCardId)
+    {
+        return simCardRepository.findSimCardById(simCardId);
     }
 }

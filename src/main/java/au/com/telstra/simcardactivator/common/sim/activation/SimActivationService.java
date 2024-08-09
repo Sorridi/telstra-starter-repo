@@ -1,5 +1,7 @@
-package au.com.telstra.simcardactivator.common;
+package au.com.telstra.simcardactivator.common.sim.activation;
 
+import au.com.telstra.simcardactivator.common.actuator.ActuatorRequest;
+import au.com.telstra.simcardactivator.common.actuator.ActuatorResponse;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
