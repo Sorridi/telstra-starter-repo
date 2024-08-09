@@ -8,10 +8,15 @@ import au.com.telstra.simcardactivator.common.sim.activation.SimActivationServic
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.logging.Level;
+import java.util.logging.Logger;
+
 @RestController
 @RequestMapping("/sim")
 public class SimController
 {
+    private static final Logger logger = Logger.getLogger(SimController.class.getName());
+
     private SimActivationService simActivationService;
     private SimCardRepository simCardRepository;
 
@@ -28,15 +33,7 @@ public class SimController
         String part = "with ICCID `" + request.getIccid() + "`, customer email `" + request.getCustomerEmail() + "`";
 
         ActuatorResponse response = simActivationService.activate(request);
-
-        if (response.isSuccess())
-        {
-            System.out.println("Activated SIM " + part);
-        }
-        else
-        {
-            System.out.println("Could not activate SIM " + part);
-        }
+        logger.log(Level.INFO, response.isSuccess() ? "Activated SIM {0}" : "Could not activate SIM {0}", part);
 
         SimCard card = new SimCard(request, response);
         simCardRepository.save(card);
